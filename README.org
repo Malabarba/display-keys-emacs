@@ -1,0 +1,11 @@
+#+TITLE: Display-keys
+
+Popup that displays keys pressed for certain commands.
+
+To activate, call ~display-keys-for-commands~ on the commands you want.
+
+#+BEGIN_SRC emacs-lisp
+(display-keys-for-commands #'forward-page
+                           #'backward-page
+                           #'cider-jack-in)
+#+END_SRC
