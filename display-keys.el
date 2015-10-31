@@ -98,9 +98,27 @@ See `make-frame'."
    ((consp p)
     (make-list (round (log (car p) 4)) ?\C-u))))
 
+;;; Display logic
+(defvar display-keys--timer nil)
+(defun display-keys--hide-frame ()
+  (ignore-errors
+    (when-let ((w (get-buffer-window display-keys--buffer 'all-frames)))
+      (iconify-frame (window-frame w)))))
+
+(defcustom display-keys-duration 3
+  "Number of seconds the display-keys frame is displayed."
+  :type '(choice integer nil))
+
+(defun display-keys--start-timer ()
+  (when (timerp display-keys--timer)
+    (cancel-timer display-keys--timer))
+  (when display-keys-duration
+    (setq display-keys--timer (run-at-time display-keys-duration nil #'display-keys--hide-frame))))
+
 (defun display-keys--for-command (&rest _)
   "Display the keys that invoked the current command."
   (with-current-buffer (display-keys--buffer)
+    (display-keys--start-timer)
     (with-selected-window (get-buffer-window (current-buffer) 'all-frames)
       (erase-buffer)
       (recenter 1)
