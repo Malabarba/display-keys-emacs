@@ -88,17 +88,30 @@ See `make-frame'."
       (select-frame old-frame))
     buf))
 
+(defun display-keys--prettify-prefix (p)
+  "Return a list of keys for prefix argument P."
+  (cond
+   ((and (numberp p) (< p 0))
+    (cons ?\C-- (cdr (display-keys--prettify-prefix (- p)))))
+   ((numberp p)
+    (list ?\C-u (+ p 48)))
+   ((consp p)
+    (make-list (round (log (car p) 4)) ?\C-u))))
+
 (defun display-keys--for-command (&rest _)
   "Display the keys that invoked the current command."
   (with-current-buffer (display-keys--buffer)
     (with-selected-window (get-buffer-window (current-buffer) 'all-frames)
       (erase-buffer)
-      (insert "\n")
+      (recenter 1)
+      (insert "\n " (symbol-name this-command))
+      (insert "\n\n")
       (mapc (lambda (k) (insert " "
                            (propertize (help-key-description (vector k) nil)
                                        'face 'display-keys-key)))
-            (this-command-keys-vector))
-      (recenter))))
+            (append (display-keys--prettify-prefix current-prefix-arg)
+                    (this-command-keys-vector)
+                    nil)))))
 
 ;;; Commands
 (defvar display-keys--command-list nil)
