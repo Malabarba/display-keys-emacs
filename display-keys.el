@@ -1,10 +1,11 @@
 ;;; display-keys.el --- Pretty display keys when they are pressed  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  Artur Malabarba
+;; Copyright (C) 2015 Free Software Foundation, Inc.
 
 ;; Author: Artur Malabarba <bruce.connor.am@gmail.com>
 ;; Keywords: convenience
-;; PackageRequires: ((emacs "24.5"))
+;; Version: 0.1
+;; Package-Requires: ((emacs "24.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,8 +21,6 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-
-;; 
 
 ;;; Code:
 
@@ -103,7 +102,7 @@ See `make-frame'."
 (defun display-keys--hide-frame ()
   (ignore-errors
     (when-let ((w (get-buffer-window display-keys--buffer 'all-frames)))
-      (iconify-frame (window-frame w)))))
+      (lower-frame (window-frame w)))))
 
 (defcustom display-keys-duration 3
   "Number of seconds the display-keys frame is displayed."
@@ -134,6 +133,7 @@ See `make-frame'."
 ;;; Commands
 (defvar display-keys--command-list nil)
 
+;;;###autoload
 (defun display-keys-for-commands (&rest commands)
   "Turn on keys display for the given COMMANDS."
   (interactive "CCommand name: ")
