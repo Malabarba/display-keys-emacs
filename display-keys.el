@@ -42,22 +42,33 @@
   "Face used on keys.")
 
 ;;; Buffer
+(defvar display-keys--buffer " *display-keys*")
+
 (defcustom display-keys-frame-parameters
-  '((name . "Keys Display")
-    (height . 2)
+  `((name . "Keys Display")
+    (unsplittable . t)
+    (cursor-type . nil)
+    (alpha . 70)
+    (height . 6)
     (width . 30)
-    (top .  80)
-    (left . 400)
+    (top .  400)
+    (left . -300)
+    (user-position . t)
+    (user-size . t)
+    (border-width . 0)
+    ;; (internal-border-width . 0)
+    (buffer-predicate . ,(lambda (b) (equal (buffer-name b)
+                                       display-keys--buffer)))
     (left-fringe . 0)
     (right-fringe . 0)
     (vertical-scroll-bars . nil)
-    (menu-bar-lines . nil)
+    (horizontal-scroll-bars . nil)
+    (tool-bar-lines . 0)
+    (menu-bar-lines . 0)
     (minibuffer . nil))
   "Parameters used on the recording frame.
 See `make-frame'."
   :type '(alist :key-type symbol :value-type sexp))
-
-(defvar display-keys--buffer " *display-keys*")
 
 (defun display-keys--buffer ()
   "Return the buffer used to display keys."
